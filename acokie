@@ -1,0 +1,5 @@
+<!DOCTYPE html>
+<html>
+<div onload="alert(document.cookie);">hi</div>
+</html>
+
