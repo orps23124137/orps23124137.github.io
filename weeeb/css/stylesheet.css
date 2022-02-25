@@ -1,5 +1,7 @@
 body{
     background-color: #eeeedadc;
+    display:flex;
+    flex-direction: column;
 }
 p{
     font-size: 1.125rem;
@@ -13,4 +15,39 @@ h1{
 section{
     margin-top: 5%;
     margin-bottom:5%;
+}
+hr{
+    margin:30px 5%;
+}
+footer{
+    width:100%;
+    background-color: rgb(66, 66, 66);
+}
+figure > img{
+    width:100%;
+}
+#myyoutube{
+    color:#3eb1f3;
+    margin:0.5em 0 0.5em 1em;
+    text-decoration: none;
+    font-size:2em;
+}
+#myyoutubeic{
+    color:#3eb1f3;
+    margin:0.5em 1em 0.5em 0;
+}
+footer > #myemail{
+    color:white;
+    text-align: center;
+    margin:2em 1em;
+}
+
+.myfigure{
+    transition: width 0.6s;
+    text-align:center;
+}
+@media screen and (min-width:768px){
+    .expanded_figure{
+        width:80%;
+    }
 }
