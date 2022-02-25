@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>計算機(calculator)</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/mathjs@10.1.1/lib/browser/math.js"></script>
+        <style>
+            #mycalbuttons{
+                display:grid;
+                width:33%;
+                grid-template-columns: repeat(5, 1fr);
+                grid-template-rows: repeat(6, 1fr);
+            }
+        </style>
+    </head>
+    
+    <body>
+        <main class="container">
+            <!--
+                expression
+                MS  MR  MC  M+  M-
+                sin cos tan (   )
+                lg2 log ln  e   pi
+                pec x^2 2rx +   backspace
+                1   2   3   -   CE
+                4   5   6   *   C
+                7   8   9   /   ^
+                +/- 0   .   %   =
+                //設定:代數(只能以一個英文半形字元形成) / 函數 / 矩陣
+            -->
+            <form class="form text-center my-3">
+                <!--<input class="form-control" type="text" id="expression">
+                <br>
+                <div class="container">
+                    <div class="row gx-2 justify-content-center">
+                        <input class="col-2 px-0" type="button" value="MS">
+                        <input class="col-2 px-0" type="button" value="MR">
+                        <input class="col-2 px-0" type="button" value="MC">
+                        <input class="col-2 px-0" type="button" value="M+">
+                        <input class="col-2 px-0" type="button" value="M-">
+                    </div>
+                    <div class="row gx-2 justify-content-center">
+                        <input class="col-2 px-0" type="button" value="/100">
+                        <input class="col-2 px-0" type="button" value="x^2">
+                        <input class="col-2 px-0" type="button" value="√x">
+                        <input class="col-2 px-0" type="button" value="+">
+                        <input class="col-2 px-0" type="button" value="⬅">
+                    </div>
+                    <div class="row gx-2 justify-content-center">
+                        <input class="col-2 px-0" type="button" value="1">
+                        <input class="col-2 px-0" type="button" value="2">
+                        <input class="col-2 px-0" type="button" value="3">
+                        <input class="col-2 px-0" type="button" value="-">
+                        <input class="col-2 px-0" type="button" value="CE">
+                    </div>
+                    <div class="row gx-2 justify-content-center">
+                        <input class="col-2 px-0" type="button" value="4">
+                        <input class="col-2 px-0" type="button" value="5">
+                        <input class="col-2 px-0" type="button" value="6">
+                        <input class="col-2 px-0" type="button" value="*">
+                        <input class="col-2 px-0" type="button" value="C">
+                    </div>
+                </div>-->
+                <input type="text" id="expression">
+                <input type="button" id="MS">
+                <input type="button" id="MR">
+                <input type="button" id="MC">
+                <input type="button" id="M+">
+                <input type="button" id="M-">
+                <input type="button" id="percent">
+                <input type="button" id="square">
+                <input type="button" id="sqrt">
+                <input type="button" id="+">
+                <input type="button" id="backspace">
+                <input type="button" id="number1">
+                <input type="button" id="number2">
+                <input type="button" id="number3">
+                <input type="button" id="minus">
+                <input type="button" id="CE">
+                <input type="button" id="number4">
+                <input type="button" id="number5">
+                <input type="button" id="number6">
+                <input type="button" id="multiply">
+                <input type="button" id="C">
+                <input type="button" id="number7">
+                <input type="button" id="number8">
+                <input type="button" id="number9">
+                <input type="button" id="devide">
+                <input type="button" id="power">
+                <input type="button" id="turn">
+                <input type="button" id="number0">
+                <input type="button" id="point">
+                <input type="button" id="mod">
+                <input type="button" id="equal">
+            </form>
+            <button onclick="document.write(solve(prompt('input an expresison')))">輸入expression</button>
+        </main>
+        <script>
+            var matrix_counter = 0;
+            function betterexp(expression){
+                //刪除所有空白鍵
+                expression = expression.replace(/\s+/g, '');
+                //把代數與括號中間加入*
+                /*for (var i = 0;i<expression.length;i++){
+                    if (expression[i] == '('){
+                        if (i>0 && !calculation_char.includes(expression[i-1])){
+                            expression = expression.slice(0, i) + '*' + expression.slice(i);
+                        }
+                    }
+                    else if(expression[i] == ')'){
+                        if (i<expression.length-1 && !calculation_char.includes(expression[i+1])){
+                            expression = expression.slice(0, i+1) + "*" + expression.slice(i+1);
+                        }
+                    }
+                }*/
+                return expression;
+            }
+            function matrix_identity(n){
+                newmatrix = [];
+                for (var row = 0;row<n;row++){
+                    newmatrix.push([]);
+                    for (var column = 0;column<n;column++){
+                        newmatrix[row].push((row == column)?1:0);
+                    }
+                }
+                return custom_matrix("newmatrix."+(matrix_counter+1), n, n, newmatrix);
+            }
+            function matrix_zeros(row, column){
+                newmatrix = [];
+                for (var i = 0;i<row;i++){
+                    newmatrix.push([]);
+                    for (var j = 0;j<column;j++){
+                        newmatrix[i].push(0);
+                    }
+                }
+                return custom_matrix("newmatrix."+(matrix_counter+1), row, column, newmatrix);
+            }
+            function matrix_ones(row, column){
+                newmatrix = [];
+                for (var i = 0;i<row;i++){
+                    newmatrix.push([]);
+                    for (var j = 0;j<column;j++){
+                        newmatrix[i].push(1);
+                    }
+                }
+                return custom_matrix("newmatrix."+(matrix_counter+1), row, column, newmatrix);
+            }
+            function matrix_transpose(matrix){
+                newmatrix = [];
+                for (var i = 0;i<matrix.column;i++){
+                    newmatrix.push([]);
+                    for (var j = 0;j<matrix.row;j++){
+                        newmatrix[i].push(matrix.matrix[j][i]);
+                    }
+                }
+                return custom_matrix("newmatrix."+(matrix_counter+1), matrix.column, matrix.row, newmatrix);
+            }
+            function matrix_multiplication(matrix1, matrix2){
+                newmatrix = [];
+                var sumof = 0;
+                for (var i = 0;i<matrix1.row;i++){
+                    newmatrix.push([]);
+                }
+                for (var newrow = 0;newrow<matrix1.row;newrow++){
+                    for (var newcol = 0;newcol<matrix2.column;newcol++){
+                        sumof = 0;
+                        for (var mul_index = 0;mul_index<matrix1.column;mul_index++){
+                            sumof += matrix1.matrix[newrow][mul_index] * matrix2.matrix[mul_index][newcol];
+                        }
+                        newmatrix[newrow].push(sumof);
+                    }
+                }
+                return custom_matrix("newmatrix."+(matrix_counter+1), matrix1.row, matrix2.column, newmatrix);
+            }
+            function matrix_to_function(matrix, func){
+                newmatrix = [];
+                for (var i = 0;i<matrix.row;i++){
+                    newmatrix.push([]);
+                }
+                for (var row = 0;row<matrix.row;row++){
+                    for (var column = 0;column<matrix.column;column++){
+                        newmatrix[row].push(func(matrix.matrix[row][column]));
+                    }
+                }
+                return custom_matrix("newmatrix."+(matrix_counter+1), matrix.row, matrix.column, newmatrix);
+            }
+            //矩陣二元運算
+            function matrix_binary_calculation(matrix1, matrix2, func){
+                switch(func.length){
+                    case 0:
+                        return func();
+                        break;
+                    case 1:
+                        return [matrix_to_function(matrix1, func), matrix_to_function(matrix2, func)];
+                        break;
+                    case 2:{
+                        if(matrix1.row == matrix2.row){
+                            newmatrix = [];
+                            for(var i = 0;i<matrix1.row;i++){
+                                newmatrix.push([]);
+                            }
+
+                            if (matrix1.column == matrix2.column){
+                                for (var row = 0;row<matrix1.row;row++){
+                                    for (var column = 0;column<matrix1.column;column++){
+                                        newmatrix[row].push(func(matrix1.matrix[row][column], matrix2.matrix[row][column]));
+                                    }
+                                }
+                                return custom_matrix("newmatrix."+(matrix_counter+1), matrix1.row, matrix1.column, newmatrix);
+                            }
+                            else if (matrix1.column == 1){
+                                for (var row = 0;row<matrix1.row;row++){
+                                    for (var column = 0;column<matrix2.column;column++){
+                                        newmatrix[row].push(func(matrix1.matrix[row][0], matrix2.matrix[row][column]));
+                                    }
+                                }
+                                return custom_matrix("newmatrix."+(matrix_counter+1), matrix1.row, matrix2.column, newmatrix);
+                            }
+                            else if (matrix2.column == 1){
+                                for (var row = 0;row<matrix1.row;row++){
+                                    for (var column = 0;column<matrix1.column;column++){
+                                        newmatrix[row].push(func(matrix1.matrix[row][column], matrix2.matrix[row][0]));
+                                    }
+                                }
+                                return custom_matrix("newmatrix."+(matrix_counter+1), matrix1.row, matrix1.column, newmatrix);
+                            }
+                            else{
+                                return -1;
+                            }
+                        }
+                        else if (matrix1.column == matrix2.column){
+                            if (matrix1.row == 1){
+                                for (var row = 0;row<matrix2.row;row++){
+                                    for (var column = 0;column<matrix2.column;column++){
+                                        newmatrix[row].push(func(matrix1.matrix[0][column], matrix2.matrix[row][column]));
+                                    }
+                                }
+                                return custom_matrix("newmatrix."+(matrix_counter+1), matrix2.row, matrix2.column, newmatrix);
+                            }
+                            else if (matrix2.row == 1){
+                                for (var row = 0;row<matrix1.row;row++){
+                                    for (var column = 0;column<matrix1.column;column++){
+                                        newmatrix[row].push(func(matrix1.matrix[row][column], matrix2.matrix[0][column]));
+                                    }
+                                }
+                                return custom_matrix("newmatrix."+(matrix_counter+1), matrix1.row, matrix1.column, newmatrix);
+                            }
+                            else{
+                                return -1;
+                            }
+                        }
+                        else{
+                            return -1;
+                        }
+                    }
+                    default:
+                        return -1;
+                }
+            }
+            //所有 row 與 column 必須為1或一個固定值
+            function matrix_multivar_function(matrix_list, func){
+                if (matrix_list.length == func.length){
+                    var another_row = 0;
+                    var another_column = 0;
+                    for (var i = 0;i<matrix_list.length;i++){
+                        if (matrix_list[i].row != 1){
+                            if (another_row == 0){
+                                another_row = matrix_list[i].row;
+                            }
+                            else if(another_row != matrix_list[i].row){
+                                return -1;
+                            }
+                        }
+                        if (matrix_list[i].column != 1){
+                            if (another_column == 0){
+                                another_column = matrix_list[i].column;
+                            }
+                            else if(another_column != matrix_list[i].column){
+                                return -1;
+                            }
+                        }
+                    }
+                    newmatrix = [];
+                    for (var row = 0;row<another_row;row++){
+                        newmatrix.push([]);
+                        for (var column = 0;column<another_column;column++){
+                            dataarray = [];
+                            for (var i = 0;i<matrix_list.length;i++){
+                                dataarray.push(matrix_list[i].matrix[(matrix_list[i].row == 1)?0:row][(matrix_list[i].column == 1)?0:column]);
+                            }
+                            newmatrix[row].push(func.apply(null, dataarray));
+                        }
+                    }
+                    return custom_matrix("newmatrix."+(matrix_counter+1), another_row, another_column, newmatrix);
+                }
+                return -1;
+            }
+            //(not working)矩陣n元函數運算
+            class custom_function{
+                constructor(name, var_count, var_names, expression){
+                    this.name = name;
+                    this.var_count = var_count;
+                    this.var_names = var_names;
+                    this.expression = betterexp(expression);
+                }
+            }
+            class custom_variable{
+                constructor(name, value){
+                    this.name = name;
+                    this.value = value;
+                }
+            }
+            class custom_matrix{
+                constructor(name, row, column, matrix_values){
+                    this.name = name;
+                    this.row = row;
+                    this.column = column;
+                    this.matrix = matrix_values;
+                }
+            }
+
+            numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+            characters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+            calculation_char = ['+', '-', '*', '/', '^'];
+            variables = new Map();
+            variables.set('sin', Math.sin);
+            variables.set('cos', Math.cos);
+            variables.set('tan', Math.tan);
+            variables.set('log', Math.log10);
+            variables.set('ln', Math.log);
+            variables.set('lg2', Math.log2);
+            variables.set('pow', Math.pow);
+            variables.set('power', Math.pow);
+            variables.set('root', root);
+            variables.set('exp', Math.exp);
+            variables.set('asin', Math.asin);
+            variables.set('acos', Math.acos);
+            variables.set('atan', Math.atan);
+            algebra = new Map();
+            algebra.set('e', Math.E);
+            expression = documnet.getElementById("expression");
+            MS = document.getElementById("MS");
+            MC = document.getElementById("MC");
+            MR = document.getElementById("MR");
+            MP = document.getElementById("M+");
+            MM = document.getElementById("MM");
+            CE = document.getElementById("CE");
+            C = document.getElementById("C");
+            equal = document.getElementById("equal");
+
+            percent = document.getElementById("percent");
+            square = document.getElementById("square");
+            sqrt = document.getElementById("sqrt");
+
+            plus = document.getElementById("plus");
+            minus = document.getElementById("minus");
+            multiply = document.getElementById("multiply");
+            devide = document.getElementById("devide");
+            mod = document.getElementById("mod");
+            power = document.getElementById("power");
+
+            negative = document.getELementById("turn")
+            backspace = document.getElementById("backspace");
+            number0 = document.getElementById("number0");
+            number1 = document.getElementById("number1");
+            number2 = document.getElementById("number2");
+            number3 = document.getElementById("number3");
+            number4 = document.getElementById("number4");
+            number5 = document.getElementById("number5");
+            number6 = document.getElementById("number6");
+            number7 = document.getElementById("number7");
+            number8 = document.getElementById("number8");
+            number9 = document.getElementById("number9");
+            point = document.getElementById("point");
+            function root(number){
+                return Math.pow(1/number);
+            }
+            
+            function eval(expression, new_nums){
+                var start = 0;
+                var end = 0;
+                var sum = 0;
+                for (var i = 0;i<expression.length.i++){
+                    if (expression[i] == '('){
+                        start = i;
+                        for (i = )
+                    }
+                }
+            }
+            function new_algebra(char, number){
+                algebra.set(char, number);
+            }
+            function new_function(expression){
+                return function(numbers){
+                    eval(expression)
+                };
+            }
+        </script>
+    </body>
+</html>
