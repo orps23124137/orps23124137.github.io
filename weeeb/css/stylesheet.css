@@ -2,6 +2,8 @@ body{
     background-color: #eeeedadc;
     display:flex;
     flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
 }
 p{
     font-size: 1.125rem;
@@ -22,6 +24,7 @@ hr{
 footer{
     width:100%;
     background-color: rgb(66, 66, 66);
+    min-height:50vh;
 }
 figure > img{
     width:100%;
@@ -74,5 +77,8 @@ figcaption > div[open='true'] > .cap-description {
 @media screen and (min-width:768px){
     .expanded_figure{
         width:80%;
+    }
+    footer{
+        min-height:30vh;
     }
 }
