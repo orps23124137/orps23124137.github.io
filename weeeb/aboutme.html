@@ -9,9 +9,20 @@
         <title>About me</title>
     </head>
     <body>
-        <nav class="navbar">
-            <a class="active">About me</a>
-            <a>pictures</a>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+            <a class="navbar-brand" href="#">My page</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navitems" aria-controls="navitems" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            
+            <div class="collapse navbar-collapse" id="navitems">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/aboutme.html">About me</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pictures.html">My portfolio</a>
+                    </li>
+                </ul>
+            </div>
         </nav>
         <header class="container">
             <h1>About me</h1>
@@ -19,8 +30,8 @@
         <main class="container">
             <div class="row">
                 <section class="row my-5">
-                    <img src="" alt="My photo" class="col-lg-4 text-center">
-                    <h2 class="col-lg-8 text-center">Gavin 鄭(Zheng)</h2>
+                    <!--<img src="" alt="My photo" class="col-lg-4 text-center">-->
+                    <h2 class="offset-lg-4 col-lg-8 text-center">Gavin 鄭(Zheng)</h2>
                     <p>I'm a boy from Taiwan, born in 2004.<br>I started playing computer (games) back when I was just 2, 3, and as I grow, I also slowly developed interest in computer things.</p>
                 </section>
                 <section class="row col-md-6 my-5 align-content-start">
@@ -41,8 +52,13 @@
                 </section>
             </div>
         </main>
-        <footer class="text-center">
-            <p>Made in 2022</p>
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 d-flex align-items-center justify-content-center"><a id="myyoutube" href="https://www.youtube.com/channel/UCcs69VxtPOAmccPhUdtpVhA/channels">My Youtube</a><a aria-label="youtube" href="https://www.youtube.com/channel/UCcs69VxtPOAmccPhUdtpVhA/channels"><i id="myyoutubeic" class="fa fa-2x fa-brands fa-youtube"></i></a></div>
+                </div>
+            </div>
+            <address id="myemail">My email: <em>minecraft23124137@gmail.com</em> <strong>Please don't spam</strong></address>
         </footer>
     </body>
 </html>
